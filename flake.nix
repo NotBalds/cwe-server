@@ -10,7 +10,7 @@
 		packages."${system}".default = pkgs.buildGoModule {
 			name = "cwe-server";
 			src = ./.;
-			vendorHash = "";
+			vendorHash = null;
 		};
 		nixosModules.cwe-server = { config, lib, ... }: {
 			options = {
