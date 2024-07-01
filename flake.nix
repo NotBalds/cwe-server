@@ -8,20 +8,20 @@
 	pkgs = nixpkgs.legacyPackages.${system};
 	in {
 		packages."${system}".default = pkgs.buildGoModule {
-			name = "cwe-server";
+			name = "cwe_server";
 			src = ./.;
 			vendorHash = null;
 		};
-		nixosModules.cwe-server = { config, lib, ... }: {
+		nixosModules.cwe_server = { config, lib, ... }: {
 			options = {
-				server.cwe-server.enable = lib.mkEnableOption "Enable cwe server";
+				server.cwe_server.enable = lib.mkEnableOption "Enable cwe server";
 			};
-			config = lib.mkIf config.server.cwe-server.enable {
-				systemd.services.cwe-server = {
+			config = lib.mkIf config.server.cwe_server.enable {
+				systemd.services.cwe_server = {
 					wantedBy = [ "multi-user.target" ];
 					serviceConfig = {
 						WorkingDirectory = "${self.packages."${system}".default}";
-						ExecStart = "${self.packages."${system}".default}/bin/cwe-server";
+						ExecStart = "${self.packages."${system}".default}/bin/cwe_server";
 					};
 				};
 				services.frp.settings.proxies = [{
