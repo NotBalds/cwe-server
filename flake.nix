@@ -28,8 +28,8 @@
 					name = "cwe";
 					type = "tcp";
 					localIP = "127.0.0.1";
-					localPort = "1337";
-					remotePort = "1337";
+					localPort = 1337;
+					remotePort = 1337;
 				}];
 			};
 		};
