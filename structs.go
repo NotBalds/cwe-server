@@ -1,8 +1,9 @@
 package main
 
 type Message struct {
-	Sender  string // UUID
-	Content string // Base64 of ciphered content
+	Sender   string // UUID
+	Content  string // Base64 of ciphered content
+	SendTime string
 }
 
 type Database map[string][]Message

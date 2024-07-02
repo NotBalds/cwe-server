@@ -6,6 +6,8 @@ import (
 	"io/fs"
 	"net/http"
 	"os"
+	"strconv"
+	"time"
 )
 
 func sendMessage(w http.ResponseWriter, r *http.Request) {
@@ -21,7 +23,14 @@ func sendMessage(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &send)
 	FatalIfErr(err, "Can't unmarshal body")
 
-	db[send.Receiver] = append(db[send.Receiver], Message{send.Sender, send.Content})
+	sendtime, _ := strconv.ParseInt(send.SendTime, 10, 64)
+
+	if time.Now().Unix()-sendtime > 10 {
+		w.WriteHeader(400)
+		return
+	}
+
+	db[send.Receiver] = append(db[send.Receiver], Message{send.Sender, send.Content, send.SendTime})
 
 	newdb, err := json.Marshal(db)
 	FatalIfErr(err, "Can't marshal new db")
