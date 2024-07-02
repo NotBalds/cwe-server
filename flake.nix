@@ -4,13 +4,13 @@
 	};
 
 	outputs = { self, nixpkgs, ... }:
-	let system = "aarch64-linux";
+	let system = "x86_64-linux";
 	pkgs = nixpkgs.legacyPackages.${system};
 	in {
 		packages."${system}".default = pkgs.buildGoModule {
 			name = "cwe_server";
 			src = ./.;
-			vendorHash = null;
+			vendorHash = "sha256-DahEqghgqBg/SL/Snu8IS8mv826otPibtseeNuHKJZU=";
 		};
 		nixosModules.cwe_server = { config, lib, ... }: {
 			options = {
