@@ -1,18 +1,27 @@
 package main
 
 type Message struct {
-	Sender   string // UUID
-	Content  string // Base64 of ciphered content
-	SendTime string
+	Sender  string // UUID
+	Content string // Base64 of ciphered content
 }
 
 type Database map[string][]Message
 
 type User struct {
-	Uuid string // UUID
+	Uuid          string // UUID
+	UuidSignature string
+}
+
+type Register map[string]string
+
+type Registration struct {
+	Uuid      string
+	PublicKey string
 }
 
 type Send struct {
-	Receiver string
+	Receiver          string
+	SendTime          string
+	SendTimeSignature string
 	Message
 }
