@@ -37,10 +37,11 @@ func getMessages(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &usr)
 	FatalIfErr(err, "Can't unmarshal body")
 
-	btssig, err := base64.StdEncoding.DecodeString(usr.UuidSignature)
-	btskey, err := base64.StdEncoding.DecodeString(register[usr.Uuid])
-	key, err := x509.ParsePKCS1PublicKey(btskey)
-	checksig := rsa.VerifyPKCS1v15(key, 0, []byte(usr.Uuid), btssig)
+	btssig, _ := base64.StdEncoding.DecodeString(usr.GetTimeSignature)
+	btskey, _ := base64.StdEncoding.DecodeString(register[usr.Uuid])
+	key, _ := x509.ParsePKCS1PublicKey(btskey)
+	checksig := rsa.VerifyPKCS1v15(key, 0, []byte(usr.GetTime), btssig)
+
 	if checksig != nil {
 		w.WriteHeader(401)
 		return

@@ -8,8 +8,9 @@ type Message struct {
 type Database map[string][]Message
 
 type User struct {
-	Uuid          string // UUID
-	UuidSignature string
+	Uuid             string // UUID
+	GetTime          string
+	GetTimeSignature string
 }
 
 type Register map[string]string
