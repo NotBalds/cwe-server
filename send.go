@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/fs"
 	"net/http"
@@ -27,6 +28,7 @@ func sendMessage(w http.ResponseWriter, r *http.Request) {
 
 	if time.Now().Unix()-sendtime > 10 {
 		w.WriteHeader(400)
+		fmt.Println("warning! spam!", strconv.FormatInt(time.Now().Unix(), 10), "and", strconv.FormatInt(sendtime, 10), "are not the same!")
 		return
 	}
 
