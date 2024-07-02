@@ -1,20 +1,18 @@
 package main
 
 import (
+	"context"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
-	"io"
 	"io/fs"
-	"net/http"
 	"os"
 	"strconv"
 	"time"
 )
 
-func sendMessage(w http.ResponseWriter, r *http.Request) {
+func sendMessage(ctx context.Context, input *SendInput) (*StatusOutput, error) {
 	data, err := os.ReadFile("db.json")
 	FatalIfErr(err, "Can't read database")
 	var db Database
@@ -27,18 +25,12 @@ func sendMessage(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(data, &register)
 	FatalIfErr(err, "Can't Unmarshal register")
 
-	var send Send
-	body, err := io.ReadAll(r.Body)
-	FatalIfErr(err, "Can't read request body")
-	err = json.Unmarshal(body, &send)
-	FatalIfErr(err, "Can't unmarshal body")
+	var send = input.Body
 
 	sendtime, _ := strconv.ParseInt(send.SendTime, 10, 64)
 
 	if time.Now().Unix()-sendtime > 10 {
-		w.WriteHeader(400)
-		fmt.Println("warning! spam!", strconv.FormatInt(time.Now().Unix(), 10), "and", strconv.FormatInt(sendtime, 10), "are not the same!")
-		return
+		return &StatusOutput{400}, nil
 	}
 
 	btssig, _ := base64.StdEncoding.DecodeString(send.SendTimeSignature)
@@ -47,8 +39,7 @@ func sendMessage(w http.ResponseWriter, r *http.Request) {
 	checksig := rsa.VerifyPKCS1v15(key, 0, []byte(send.SendTime), btssig)
 
 	if checksig != nil {
-		w.WriteHeader(401)
-		return
+		return &StatusOutput{401}, nil
 	}
 
 	db[send.Receiver] = append(db[send.Receiver], Message{send.Sender, send.Content})
@@ -58,5 +49,5 @@ func sendMessage(w http.ResponseWriter, r *http.Request) {
 	err = os.WriteFile("db.json", newdb, fs.ModePerm)
 	FatalIfErr(err, "Can't write new db")
 
-	w.WriteHeader(200)
+	return &StatusOutput{200}, nil
 }

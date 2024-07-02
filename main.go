@@ -4,6 +4,9 @@ import (
 	"io/fs"
 	"net/http"
 	"os"
+
+	"github.com/danielgtaylor/huma/v2"
+	"github.com/danielgtaylor/huma/v2/adapters/humago"
 )
 
 func exists(path string) bool {
@@ -22,11 +25,12 @@ func main() {
 	if !exists("register.json") {
 		os.WriteFile("register.json", []byte("{}"), fs.ModePerm)
 	}
-	mux := http.NewServeMux()
 
-	mux.HandleFunc("POST /get", getMessages)
-	mux.HandleFunc("POST /send", sendMessage)
-	mux.HandleFunc("POST /register", registerUser)
+	mux := http.NewServeMux()
+	api := humago.New(mux, huma.DefaultConfig("CWE API", "1.0.0"))
+	huma.Post(api, "/register", registerUser)
+	huma.Post(api, "/get", getMessages)
+	huma.Post(api, "/send", sendMessage)
 
 	http.ListenAndServe(":1337", mux)
 }

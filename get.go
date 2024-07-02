@@ -1,14 +1,13 @@
 package main
 
 import (
+	"context"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
-	"io"
 	"io/fs"
 	"log"
-	"net/http"
 	"os"
 )
 
@@ -18,7 +17,7 @@ func FatalIfErr(err error, msg string) {
 	}
 }
 
-func getMessages(w http.ResponseWriter, r *http.Request) {
+func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	data, err := os.ReadFile("db.json")
 	FatalIfErr(err, "Can't read database")
 	var db Database
@@ -31,11 +30,7 @@ func getMessages(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(data, &register)
 	FatalIfErr(err, "Can't Unmarshal register")
 
-	var usr User
-	body, err := io.ReadAll(r.Body)
-	FatalIfErr(err, "Can't read request body")
-	err = json.Unmarshal(body, &usr)
-	FatalIfErr(err, "Can't unmarshal body")
+	var usr = input.Body
 
 	btssig, _ := base64.StdEncoding.DecodeString(usr.GetTimeSignature)
 	btskey, _ := base64.StdEncoding.DecodeString(register[usr.Uuid])
@@ -43,17 +38,16 @@ func getMessages(w http.ResponseWriter, r *http.Request) {
 	checksig := rsa.VerifyPKCS1v15(key, 0, []byte(usr.GetTime), btssig)
 
 	if checksig != nil {
-		w.WriteHeader(401)
-		return
+		return &GetOutput{Status: 401}, nil
 	}
 
-	res, err := json.Marshal(db[usr.Uuid])
-	FatalIfErr(err, "Can't marshal a response")
-	w.Write(res)
+	var msgs = db[usr.Uuid]
 
 	db[usr.Uuid] = []Message{}
 	newdb, err := json.Marshal(db)
 	FatalIfErr(err, "Can't marshal new db")
 	err = os.WriteFile("db.json", newdb, fs.ModePerm)
 	FatalIfErr(err, "Can't write new db")
+
+	return &GetOutput{msgs, 200}, nil
 }
