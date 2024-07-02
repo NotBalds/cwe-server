@@ -20,7 +20,7 @@
 				systemd.services.cwe_server = {
 					wantedBy = [ "multi-user.target" ];
 					serviceConfig = {
-						WorkingDirectory = "${self.packages."${system}".default}";
+						WorkingDirectory = "/var/lib/cwe";
 						ExecStart = "${self.packages."${system}".default}/bin/cwe_server";
 					};
 				};
