@@ -14,7 +14,7 @@ type Database map[string][]Message
 type GetInput struct {
 	Body struct {
 		Uuid             string `json:"uuid" example:"045cd5a4-7d09-44fe-8140-51b61c7e9750"` // UUID
-		GetTime          string `json:"gettime" doc:"Unixtime when request is sent"`
+		GetTime          string `json:"gettime" regex:"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" doc:"Unixtime when request is sent"`
 		GetTimeSignature string `json:"gettimesignature" doc:"RSA signature of gettime, in Base64, signed with publickey that was sent in /register"`
 	}
 }
@@ -28,7 +28,7 @@ type Register map[string]string
 
 type RegisterInput struct {
 	Body struct {
-		Uuid      string `json:"uuid" example:"045cd5a4-7d09-44fe-8140-51b61c7e9750"`
+		Uuid      string `json:"uuid" regex:"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" example:"045cd5a4-7d09-44fe-8140-51b61c7e9750"`
 		PublicKey string `json:"publickey" doc:"PublicKey, base64-encoded"`
 	}
 }
