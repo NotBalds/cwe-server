@@ -29,7 +29,7 @@ type Register map[string]string
 type RegisterInput struct {
 	Body struct {
 		Uuid      string `json:"uuid" format:"uuid" example:"045cd5a4-7d09-44fe-8140-51b61c7e9750"`
-		PublicKey string `json:"publickey" length:"360" doc:"PublicKey, base64-encoded"`
+		PublicKey string `json:"publickey" minLength:"360" maxLength:"360" doc:"PublicKey, base64-encoded"`
 	}
 }
 
