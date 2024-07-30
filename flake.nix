@@ -6,13 +6,14 @@
 	outputs = { self, nixpkgs, ... }:
 	let system = "aarch64-linux";
 	pkgs = nixpkgs.legacyPackages.${system};
+	xpkgs = nixpkgs.legacyPackages.x86_64-linux;
 	in {
 		packages."${system}".default = pkgs.buildGoModule {
 			name = "cwe_server";
 			src = ./.;
 			vendorHash = "sha256-DahEqghgqBg/SL/Snu8IS8mv826otPibtseeNuHKJZU=";
 		};
-		packages.x86_64-linux.default = pkgs.buildGoModule {
+		packages.x86_64-linux.default = xpkgs.buildGoModule {
 			name = "cwe_server";
 			src = ./.;
 			vendorHash = "sha256-DahEqghgqBg/SL/Snu8IS8mv826otPibtseeNuHKJZU=";
