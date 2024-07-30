@@ -12,7 +12,11 @@
 			src = ./.;
 			vendorHash = "sha256-DahEqghgqBg/SL/Snu8IS8mv826otPibtseeNuHKJZU=";
 		};
-		packages.x86_64-linux.default = self.packages.${system}.default;
+		packages.x86_64-linux.default = pkgs.buildGoModule {
+			name = "cwe_server";
+			src = ./.;
+			vendorHash = "sha256-DahEqghgqBg/SL/Snu8IS8mv826otPibtseeNuHKJZU=";
+		};
 		nixosModules.cwe_server = { config, lib, ... }: {
 			options = {
 				server.cwe_server.enable = lib.mkEnableOption "Enable cwe server";
