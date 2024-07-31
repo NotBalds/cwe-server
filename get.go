@@ -9,7 +9,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
-	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -34,10 +33,6 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	err = json.Unmarshal(data, &register)
 	FatalIfErr(err, "Can't Unmarshal register")
 
-	fmt.Println("uuid:", input.Body.Uuid)
-	fmt.Println("time:", input.Body.GetTime)
-	fmt.Println("time signature:", input.Body.GetTimeSignature)
-
 	var usr = input.Body
 
 	btssig, _ := base64.StdEncoding.DecodeString(usr.GetTimeSignature)
@@ -53,7 +48,6 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	checksig := rsa.VerifyPKCS1v15(key, crypto.SHA256, hash.Sum(nil), btssig)
 
 	if checksig != nil {
-		log.Println("Error verifying signature, ", "err", checksig)
 		return &GetOutput{Status: 401}, nil
 	}
 
