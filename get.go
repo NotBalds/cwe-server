@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
@@ -37,8 +38,7 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 
 	var usr = input.Body
 
-	sigbl, _ := pem.Decode([]byte(input.Body.GetTimeSignature))
-	btssig := sigbl.Bytes
+	btssig, _ := base64.StdEncoding.DecodeString(usr.GetTimeSignature)
 	keybl, _ := pem.Decode([]byte(register[usr.Uuid]))
 	btskey := keybl.Bytes
 	key, err := x509.ParsePKCS1PublicKey(btskey)
