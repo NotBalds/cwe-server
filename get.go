@@ -52,6 +52,9 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	}
 
 	var msgs = db[usr.Uuid]
+	if msgs == nil {
+		msgs = []Message{}
+	}
 
 	db[usr.Uuid] = []Message{}
 	newdb, err := json.Marshal(db)
