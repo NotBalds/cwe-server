@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -29,6 +30,10 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	var register Register
 	err = json.Unmarshal(data, &register)
 	FatalIfErr(err, "Can't Unmarshal register")
+
+	fmt.Println("uuid:", input.Body.Uuid)
+	fmt.Println("time:", input.Body.GetTime)
+	fmt.Println("time signature:", input.Body.GetTimeSignature)
 
 	var usr = input.Body
 
