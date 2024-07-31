@@ -32,9 +32,18 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 
 	var usr = input.Body
 
-	btssig, _ := base64.StdEncoding.DecodeString(usr.GetTimeSignature)
-	btskey, _ := base64.StdEncoding.DecodeString(register[usr.Uuid])
-	key, _ := x509.ParsePKCS1PublicKey(btskey)
+	btssig, err := base64.StdEncoding.DecodeString(usr.GetTimeSignature)
+	if err != nil {
+		return &GetOutput{Status: 422}, nil
+	}
+	btskey, err := base64.StdEncoding.DecodeString(register[usr.Uuid])
+	if err != nil {
+		return &GetOutput{Status: 498}, nil
+	}
+	key, err := x509.ParsePKCS1PublicKey(btskey)
+	if err != nil {
+		FatalIfErr(err, "Can't parse public key from registry")
+	}
 	checksig := rsa.VerifyPKCS1v15(key, 0, []byte(usr.GetTime), btssig)
 
 	if checksig != nil {
