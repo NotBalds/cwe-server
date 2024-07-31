@@ -49,6 +49,7 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	checksig := rsa.VerifyPKCS1v15(key, 0, []byte(usr.GetTime), btssig)
 
 	if checksig != nil {
+		log.Println("Error verifying signature, ", "err", checksig)
 		return &GetOutput{Status: 401}, nil
 	}
 

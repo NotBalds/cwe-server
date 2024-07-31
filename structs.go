@@ -15,7 +15,7 @@ type GetInput struct {
 	Body struct {
 		Uuid             string `json:"uuid" format:"uuid" example:"045cd5a4-7d09-44fe-8140-51b61c7e9750"` // UUID
 		GetTime          string `json:"gettime" doc:"Unixtime when request is sent"`
-		GetTimeSignature string `json:"gettimesignature" doc:"RSA signature of gettime, in PEM, signed with publickey that was sent in /register"`
+		GetTimeSignature string `json:"gettimesignature" doc:"RSA signature of gettime, in Base64, signed with publickey that was sent in /register"`
 	}
 }
 
@@ -37,7 +37,7 @@ type SendInput struct {
 	Body struct {
 		Receiver          string `json:"receiver" format:"uuid" doc:"UUID of receiver"`
 		SendTime          string `json:"sendtime" doc:"Unixtime when request is sent"`
-		SendTimeSignature string `json:"sendtimesignature" doc:"RSA signature of sendtime, in PEM, signed with publickey that was sent in /register"`
+		SendTimeSignature string `json:"sendtimesignature" doc:"RSA signature of sendtime, in Base64, signed with publickey that was sent in /register"`
 		Message
 	}
 }
