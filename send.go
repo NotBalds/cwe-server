@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto"
 	"crypto/rsa"
+	"crypto/sha256"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
@@ -40,7 +41,10 @@ func sendMessage(ctx context.Context, input *SendInput) (*StatusOutput, error) {
 	key, err := x509.ParsePKCS1PublicKey(btskey)
 
 	btssig, _ := base64.StdEncoding.DecodeString(send.SendTimeSignature)
-	checksig := rsa.VerifyPKCS1v15(key, crypto.SHA256, []byte(send.SendTime), btssig)
+
+	hash := sha256.New()
+	hash.Write([]byte(send.SendTime))
+	checksig := rsa.VerifyPKCS1v15(key, crypto.SHA256, hash.Sum(nil), btssig)
 
 	if checksig != nil {
 		return &StatusOutput{401}, nil

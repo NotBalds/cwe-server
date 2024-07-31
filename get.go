@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto"
 	"crypto/rsa"
+	"crypto/sha256"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
@@ -47,7 +48,9 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 		return &GetOutput{Status: 498}, nil
 	}
 
-	checksig := rsa.VerifyPKCS1v15(key, crypto.SHA256, []byte(usr.GetTime), btssig)
+	hash := sha256.New()
+	hash.Write([]byte(usr.GetTime))
+	checksig := rsa.VerifyPKCS1v15(key, crypto.SHA256, hash.Sum(nil), btssig)
 
 	if checksig != nil {
 		log.Println("Error verifying signature, ", "err", checksig)
