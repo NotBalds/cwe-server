@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"crypto"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
+	"encoding/pem"
 	"io/fs"
 	"os"
 	"strconv"
@@ -33,10 +35,12 @@ func sendMessage(ctx context.Context, input *SendInput) (*StatusOutput, error) {
 		return &StatusOutput{400}, nil
 	}
 
+	keybl, _ := pem.Decode([]byte(register[send.Sender]))
+	btskey := keybl.Bytes
+	key, err := x509.ParsePKCS1PublicKey(btskey)
+
 	btssig, _ := base64.StdEncoding.DecodeString(send.SendTimeSignature)
-	btskey, _ := base64.StdEncoding.DecodeString(register[send.Sender])
-	key, _ := x509.ParsePKCS1PublicKey(btskey)
-	checksig := rsa.VerifyPKCS1v15(key, 0, []byte(send.SendTime), btssig)
+	checksig := rsa.VerifyPKCS1v15(key, crypto.SHA256, []byte(send.SendTime), btssig)
 
 	if checksig != nil {
 		return &StatusOutput{401}, nil
