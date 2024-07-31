@@ -42,7 +42,7 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	}
 	key, err := x509.ParsePKCS1PublicKey(btskey)
 	if err != nil {
-		FatalIfErr(err, "Can't parse public key from registry")
+		return &GetOutput{Status: 498}, nil
 	}
 	checksig := rsa.VerifyPKCS1v15(key, 0, []byte(usr.GetTime), btssig)
 
