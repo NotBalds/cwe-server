@@ -4,8 +4,8 @@ import (
 	"context"
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/base64"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"io/fs"
 	"log"
@@ -37,18 +37,15 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 
 	var usr = input.Body
 
-	btssig, err := base64.StdEncoding.DecodeString(usr.GetTimeSignature)
-	if err != nil {
-		return &GetOutput{Status: 422}, nil
-	}
-	btskey, err := base64.StdEncoding.DecodeString(register[usr.Uuid])
-	if err != nil {
-		return &GetOutput{Status: 498}, nil
-	}
+	sigbl, _ := pem.Decode([]byte(input.Body.GetTimeSignature))
+	btssig := sigbl.Bytes
+	keybl, _ := pem.Decode([]byte(register[usr.Uuid]))
+	btskey := keybl.Bytes
 	key, err := x509.ParsePKCS1PublicKey(btskey)
 	if err != nil {
 		return &GetOutput{Status: 498}, nil
 	}
+
 	checksig := rsa.VerifyPKCS1v15(key, 0, []byte(usr.GetTime), btssig)
 
 	if checksig != nil {
