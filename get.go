@@ -11,7 +11,10 @@ import (
 	"encoding/pem"
 	"io/fs"
 	"log"
+	"math"
 	"os"
+	"strconv"
+	"time"
 )
 
 func FatalIfErr(err error, msg string) {
@@ -41,6 +44,12 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	key, err := x509.ParsePKCS1PublicKey(btskey)
 	if err != nil {
 		return &GetOutput{Status: 498}, nil
+	}
+
+	sendtime, _ := strconv.ParseInt(usr.GetTime, 10, 64)
+
+	if math.Abs(float64(time.Now().Unix()-sendtime)) > 10 {
+		return &GetOutput{Status: 400}, nil
 	}
 
 	hash := sha256.New()

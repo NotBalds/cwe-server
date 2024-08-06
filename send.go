@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"io/fs"
+	"math"
 	"os"
 	"strconv"
 	"time"
@@ -32,7 +33,7 @@ func sendMessage(ctx context.Context, input *SendInput) (*StatusOutput, error) {
 
 	sendtime, _ := strconv.ParseInt(send.SendTime, 10, 64)
 
-	if time.Now().Unix()-sendtime > 10 {
+	if math.Abs(float64(time.Now().Unix()-sendtime)) > 10 {
 		return &StatusOutput{400}, nil
 	}
 
