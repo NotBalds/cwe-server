@@ -1,8 +1,9 @@
 package main
 
 type Message struct {
-	Sender  string `json:"sender" format:"uuid" doc:"Sender's UUID"`
-	Content string `json:"content" doc:"Content, encoded with base64"`
+	Sender      string `json:"sender" format:"uuid" doc:"Sender's UUID"`
+	Content     string `json:"content" doc:"Content, encoded with base64"`
+	ContentType string `json:"content_type" doc:"Content type, plain text"`
 }
 
 type StatusOutput struct {
