@@ -4,11 +4,10 @@
 	};
 
 	outputs = { self, nixpkgs, ... }:
-	let system = "aarch64-linux";
-	pkgs = nixpkgs.legacyPackages.${system};
+	let pkgs = nixpkgs.legacyPackages.aarch64-linux;
 	xpkgs = nixpkgs.legacyPackages.x86_64-linux;
 	in {
-		packages."${system}".default = pkgs.buildGoModule {
+		packages.aarch64-linux.default = pkgs.buildGoModule {
 			name = "cwe_server";
 			src = ./.;
 			vendorHash = "sha256-DahEqghgqBg/SL/Snu8IS8mv826otPibtseeNuHKJZU=";
@@ -18,7 +17,7 @@
 			src = ./.;
 			vendorHash = "sha256-DahEqghgqBg/SL/Snu8IS8mv826otPibtseeNuHKJZU=";
 		};
-		nixosModules.cwe_server = { config, lib, ... }: {
+		nixosModules.cwe_server = { config, lib, pkgs, ... }: {
 			options = {
 				server.cwe_server.enable = lib.mkEnableOption "Enable cwe server";
 			};
@@ -27,7 +26,7 @@
 					wantedBy = [ "multi-user.target" ];
 					serviceConfig = {
 						WorkingDirectory = "/var/lib/cwe";
-						ExecStart = "${self.packages."${system}".default}/bin/cwe_server";
+						ExecStart = "${self.packages."${pkgs.stdenv.hostPlatform.system}".default}/bin/cwe_server";
 					};
 				};
 				services.frp.settings.proxies = [{

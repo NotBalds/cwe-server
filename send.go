@@ -51,7 +51,7 @@ func sendMessage(ctx context.Context, input *SendInput) (*StatusOutput, error) {
 		return &StatusOutput{401}, nil
 	}
 
-	db[send.Receiver] = append(db[send.Receiver], Message{send.Sender, send.Content})
+	db[send.Receiver] = append(db[send.Receiver], send.Message)
 
 	newdb, err := json.Marshal(db)
 	FatalIfErr(err, "Can't marshal new db")
