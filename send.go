@@ -37,7 +37,7 @@ func sendMessage(ctx context.Context, input *SendInput) (*StatusOutput, error) {
 		return &StatusOutput{400}, nil
 	}
 
-	keybl, _ := pem.Decode([]byte(register[send.Sender]))
+	keybl, _ := pem.Decode([]byte(register[send.Message.Sender]))
 	btskey := keybl.Bytes
 	key, err := x509.ParsePKCS1PublicKey(btskey)
 

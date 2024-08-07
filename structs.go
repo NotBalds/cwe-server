@@ -39,9 +39,9 @@ type RegisterInput struct {
 
 type SendInput struct {
 	Body struct {
-		Receiver          string `json:"receiver" format:"uuid" doc:"UUID of receiver"`
-		SendTime          string `json:"sendtime" doc:"Unixtime when request is sent"`
-		SendTimeSignature string `json:"sendtimesignature" doc:"RSA signature of sendtime, in Base64, signed with publickey that was sent in /register"`
-		Message
+		Receiver          string  `json:"receiver" format:"uuid" doc:"UUID of receiver"`
+		SendTime          string  `json:"sendtime" doc:"Unixtime when request is sent"`
+		SendTimeSignature string  `json:"sendtimesignature" doc:"RSA signature of sendtime, in Base64, signed with publickey that was sent in /register"`
+		Message           Message `json:"message"`
 	}
 }
