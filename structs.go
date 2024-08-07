@@ -3,9 +3,9 @@ package main
 type Message struct {
 	Sender  string `json:"sender" format:"uuid" doc:"Sender's UUID"`
 	Content struct {
-		Type string `json:"content_type" doc:"Content type, plain text"`
-		Info string `json:"content_info"`
-		Data string `json:"data"`
+		Format string `json:"format" doc:"Content type, plain text"`
+		Info   string `json:"info"`
+		Data   string `json:"data"`
 	} `json:"content"`
 }
 
