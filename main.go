@@ -33,19 +33,19 @@ func main() {
 		Method:       http.MethodPost,
 		Path:         "/register",
 		Summary:      "Register a user",
-		MaxBodyBytes: 100 * 1024 * 1024}, registerUser)
+		MaxBodyBytes: 20 * 1024 * 1024}, registerUser)
 	huma.Register(api, huma.Operation{
 		OperationID:  "get",
 		Method:       http.MethodPost,
 		Path:         "/get",
 		Summary:      "Get a message",
-		MaxBodyBytes: 100 * 1024 * 1024}, getMessages)
+		MaxBodyBytes: 20 * 1024 * 1024}, getMessages)
 	huma.Register(api, huma.Operation{
 		OperationID:  "send",
 		Method:       http.MethodPost,
 		Path:         "/send",
 		Summary:      "Send a message",
-		MaxBodyBytes: 100 * 1024 * 1024}, sendMessage)
+		MaxBodyBytes: 20 * 1024 * 1024}, sendMessage)
 
 	http.ListenAndServe(":1337", mux)
 }
