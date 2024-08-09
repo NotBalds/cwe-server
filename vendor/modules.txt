@@ -1,0 +1,8 @@
+# github.com/danielgtaylor/huma/v2 v2.18.0
+## explicit; go 1.20
+github.com/danielgtaylor/huma/v2
+github.com/danielgtaylor/huma/v2/adapters/humago
+github.com/danielgtaylor/huma/v2/casing
+github.com/danielgtaylor/huma/v2/negotiation
+github.com/danielgtaylor/huma/v2/queryparam
+github.com/danielgtaylor/huma/v2/yaml

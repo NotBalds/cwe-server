@@ -15,7 +15,7 @@
 		packages.x86_64-linux.default = xpkgs.buildGoModule {
 			name = "cwe_server";
 			src = ./.;
-			vendorHash = "sha256-DahEqghgqBg/SL/Snu8IS8mv826otPibtseeNuHKJZU=";
+			vendorHash = null;
 		};
 		nixosModules.cwe_server = { config, lib, pkgs, ... }: {
 			options = {
