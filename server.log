@@ -1,0 +1,97 @@
+Already up to date.
+[K[Kresolved HEAD ref 'refs/heads/main' for repo '/home/x/coding/cwe-server'
+using revision 0c32047301320509c4428b6a5cc14073fe3eb7fe of repo '/home/x/coding/cwe-server'
+performing daemon worker op: 11
+acquiring write lock on '/nix/var/nix/temproots/891488'
+performing daemon worker op: 1
+using cache entry '{"name":"source","rev":"0c32047301320509c4428b6a5cc14073fe3eb7fe","type":"git"}' -> '{"lastModified":1722428533,"rev":"0c32047301320509c4428b6a5cc14073fe3eb7fe","revCount":33}', '/nix/store/1fsfdc7nkh6jnpyp418hy5kfclfhdkpm-source'
+performing daemon worker op: 26
+got tree '/nix/store/1fsfdc7nkh6jnpyp418hy5kfclfhdkpm-source' from 'git+file:///home/x/coding/cwe-server?ref=refs/heads/main&rev=0c32047301320509c4428b6a5cc14073fe3eb7fe'
+checking access to '/nix/store/1fsfdc7nkh6jnpyp418hy5kfclfhdkpm-source/flake.nix'
+evaluating file '/nix/store/1fsfdc7nkh6jnpyp418hy5kfclfhdkpm-source/flake.nix'
+performing daemon worker op: 19
+old lock file: {
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1722062969,
+        "narHash": "sha256-QOS0ykELUmPbrrUGmegAUlpmUFznDQeR4q7rFhl8eQg=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "b73c2221a46c13557b1b3be9c2070cc42cf01eb3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
+computing lock file node ''
+computing input 'nixpkgs'
+keeping existing input 'nixpkgs'
+computing lock file node 'nixpkgs'
+new lock file: {
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1722062969,
+        "narHash": "sha256-QOS0ykELUmPbrrUGmegAUlpmUFznDQeR4q7rFhl8eQg=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "b73c2221a46c13557b1b3be9c2070cc42cf01eb3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
+trying flake output attribute 'apps.x86_64-linux.default'
+using cached attrset attribute ''
+trying flake output attribute 'defaultApp.x86_64-linux'
+using cached attrset attribute ''
+trying flake output attribute 'packages.x86_64-linux.default'
+trying flake output attribute 'defaultPackage.x86_64-linux'
+using cached attrset attribute ''
+using cached string attribute 'packages.x86_64-linux.default.type'
+using cached string attribute 'packages.x86_64-linux.default.drvPath'
+performing daemon worker op: 1
+using cached string attribute 'packages.x86_64-linux.default.outPath'
+using cached string attribute 'packages.x86_64-linux.default.outputName'
+using cached string attribute 'packages.x86_64-linux.default.name'
+performing daemon worker op: 40
+querying info about missing paths...
+starting pool of 24 threads
+performing daemon worker op: 46
+building of '/nix/store/bgir4zj1cl9cybak41mn8g31gc3i4qmi-cwe_server.drv^out' from .drv file: created
+building of '/nix/store/bgir4zj1cl9cybak41mn8g31gc3i4qmi-cwe_server.drv^out' from .drv file: woken up
+querying info about missing paths...
+starting pool of 24 threads
+entered goal loop
+building of '/nix/store/bgir4zj1cl9cybak41mn8g31gc3i4qmi-cwe_server.drv^out' from .drv file: init
+building of '/nix/store/bgir4zj1cl9cybak41mn8g31gc3i4qmi-cwe_server.drv^out' from .drv file: loading derivation
+building of '/nix/store/bgir4zj1cl9cybak41mn8g31gc3i4qmi-cwe_server.drv^out' from .drv file: have derivation
+building of '/nix/store/bgir4zj1cl9cybak41mn8g31gc3i4qmi-cwe_server.drv^out' from .drv file: done
+building of '/nix/store/bgir4zj1cl9cybak41mn8g31gc3i4qmi-cwe_server.drv^out' from .drv file: goal destroyed
