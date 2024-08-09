@@ -19,9 +19,9 @@ func exists(path string) bool {
 }
 
 func main() {
-	godotenv.Load()
 	os.Mkdir("v0.3.0", os.ModePerm)
 	os.Chdir("v0.3.0")
+	godotenv.Load()
 	if !exists("db.json") {
 		os.WriteFile("db.json", []byte("{}"), fs.ModePerm)
 	}
