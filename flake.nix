@@ -10,12 +10,12 @@
 		packages.aarch64-linux.default = pkgs.buildGoModule {
 			name = "cwe_server";
 			src = ./.;
-			vendorHash = "sha256-DahEqghgqBg/SL/Snu8IS8mv826otPibtseeNuHKJZU=";
+			vendorHash = "sha256-In/RRBbl64wBG9xLv7FnYGDOOOvYUZ52Cey6ck0mBuM=";
 		};
 		packages.x86_64-linux.default = xpkgs.buildGoModule {
 			name = "cwe_server";
 			src = ./.;
-			vendorHash = null;
+			vendorHash = "sha256-In/RRBbl64wBG9xLv7FnYGDOOOvYUZ52Cey6ck0mBuM=";
 		};
 		nixosModules.cwe_server = { config, lib, pkgs, ... }: {
 			options = {
