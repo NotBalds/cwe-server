@@ -1,4 +1,4 @@
-package main
+package send
 
 import (
 	"context"
@@ -14,27 +14,30 @@ import (
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/NotBalds/cwe-server/internal/structs"
+	"github.com/NotBalds/cwe-server/internal/util"
 )
 
-func sendMessage(ctx context.Context, input *SendInput) (*StatusOutput, error) {
+func SendMessage(_ context.Context, input *structs.SendInput) (*structs.StatusOutput, error) {
 	data, err := os.ReadFile("db.json")
-	FatalIfErr(err, "Can't read database")
-	var db Database
+	util.FatalIfErr(err, "Can't read database")
+	var db structs.Database
 	err = json.Unmarshal(data, &db)
-	FatalIfErr(err, "Can't Unmarshal database")
+	util.FatalIfErr(err, "Can't Unmarshal database")
 
 	data, err = os.ReadFile("register.json")
-	FatalIfErr(err, "Can't read register")
-	var register Register
+	util.FatalIfErr(err, "Can't read register")
+	var register structs.Register
 	err = json.Unmarshal(data, &register)
-	FatalIfErr(err, "Can't Unmarshal register")
+	util.FatalIfErr(err, "Can't Unmarshal register")
 
 	var send = input.Body
 
 	sendtime, _ := strconv.ParseInt(send.SendTime, 10, 64)
 
 	if math.Abs(float64(time.Now().Unix()-sendtime)) > 10 {
-		return &StatusOutput{400}, nil
+		return &structs.StatusOutput{Status: 400}, nil
 	}
 
 	keybl, _ := pem.Decode([]byte(register[send.Message.Sender]))
@@ -48,15 +51,15 @@ func sendMessage(ctx context.Context, input *SendInput) (*StatusOutput, error) {
 	checksig := rsa.VerifyPKCS1v15(key, crypto.SHA256, hash.Sum(nil), btssig)
 
 	if checksig != nil {
-		return &StatusOutput{401}, nil
+		return &structs.StatusOutput{Status: 401}, nil
 	}
 
 	db[send.Receiver] = append(db[send.Receiver], send.Message)
 
 	newdb, err := json.Marshal(db)
-	FatalIfErr(err, "Can't marshal new db")
+	util.FatalIfErr(err, "Can't marshal new db")
 	err = os.WriteFile("db.json", newdb, fs.ModePerm)
-	FatalIfErr(err, "Can't write new db")
+	util.FatalIfErr(err, "Can't write new db")
 
-	return &StatusOutput{200}, nil
+	return &structs.StatusOutput{Status: 200}, nil
 }

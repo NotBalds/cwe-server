@@ -1,35 +1,18 @@
-package main
+package server
 
 import (
-	"io/fs"
 	"net/http"
-	"os"
+	"sync"
 
+	"github.com/NotBalds/cwe-server/internal/get"
+	"github.com/NotBalds/cwe-server/internal/register"
+	"github.com/NotBalds/cwe-server/internal/send"
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humago"
-	"github.com/joho/godotenv"
 )
 
-func exists(path string) bool {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true
-	}
-	return false
-}
-
-func main() {
-	os.Mkdir("v0.3.0", os.ModePerm)
-	os.Chdir("v0.3.0")
-	godotenv.Load()
-	if !exists("db.json") {
-		os.WriteFile("db.json", []byte("{}"), fs.ModePerm)
-	}
-
-	if !exists("register.json") {
-		os.WriteFile("register.json", []byte("{}"), fs.ModePerm)
-	}
-
+func httpStart(port string, wg *sync.WaitGroup) {
+	defer wg.Done()
 	mux := http.NewServeMux()
 	api := humago.New(mux, huma.DefaultConfig("CWE API", "1.0.0"))
 	huma.Register(api, huma.Operation{
@@ -37,19 +20,19 @@ func main() {
 		Method:       http.MethodPost,
 		Path:         "/register",
 		Summary:      "Register a user",
-		MaxBodyBytes: 20 * 1024 * 1024}, registerUser)
+		MaxBodyBytes: 20 * 1024 * 1024}, register.RegisterUser)
 	huma.Register(api, huma.Operation{
 		OperationID:  "get",
 		Method:       http.MethodPost,
 		Path:         "/get",
 		Summary:      "Get a message",
-		MaxBodyBytes: 20 * 1024 * 1024}, getMessages)
+		MaxBodyBytes: 20 * 1024 * 1024}, get.GetMessages)
 	huma.Register(api, huma.Operation{
 		OperationID:  "send",
 		Method:       http.MethodPost,
 		Path:         "/send",
 		Summary:      "Send a message",
-		MaxBodyBytes: 20 * 1024 * 1024}, sendMessage)
+		MaxBodyBytes: 20 * 1024 * 1024}, send.SendMessage)
 
-	http.ListenAndServe(":"+os.Getenv("CWE_PORT"), mux)
+	http.ListenAndServe(":"+port, mux)
 }

@@ -8,12 +8,12 @@
 	xpkgs = nixpkgs.legacyPackages.x86_64-linux;
 	in {
 		packages.aarch64-linux.default = pkgs.buildGoModule {
-			name = "cwe_server";
+			name = "cwe-server";
 			src = ./.;
 			vendorHash = "sha256-In/RRBbl64wBG9xLv7FnYGDOOOvYUZ52Cey6ck0mBuM=";
 		};
 		packages.x86_64-linux.default = xpkgs.buildGoModule {
-			name = "cwe_server";
+			name = "cwe-server";
 			src = ./.;
 			vendorHash = "sha256-In/RRBbl64wBG9xLv7FnYGDOOOvYUZ52Cey6ck0mBuM=";
 		};

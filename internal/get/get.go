@@ -1,4 +1,4 @@
-package main
+package get
 
 import (
 	"context"
@@ -10,31 +10,27 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"io/fs"
-	"log"
 	"math"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/NotBalds/cwe-server/internal/structs"
+	"github.com/NotBalds/cwe-server/internal/util"
 )
 
-func FatalIfErr(err error, msg string) {
-	if err != nil {
-		log.Fatalln(msg)
-	}
-}
-
-func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
+func GetMessages(_ context.Context, input *structs.GetInput) (*structs.GetOutput, error) {
 	data, err := os.ReadFile("db.json")
-	FatalIfErr(err, "Can't read database")
-	var db Database
+	util.FatalIfErr(err, "Can't read database")
+	var db structs.Database
 	err = json.Unmarshal(data, &db)
-	FatalIfErr(err, "Can't Unmarshal database")
+	util.FatalIfErr(err, "Can't Unmarshal database")
 
 	data, err = os.ReadFile("register.json")
-	FatalIfErr(err, "Can't read register")
-	var register Register
+	util.FatalIfErr(err, "Can't read register")
+	var register structs.Register
 	err = json.Unmarshal(data, &register)
-	FatalIfErr(err, "Can't Unmarshal register")
+	util.FatalIfErr(err, "Can't Unmarshal register")
 
 	var usr = input.Body
 
@@ -43,13 +39,13 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	btskey := keybl.Bytes
 	key, err := x509.ParsePKCS1PublicKey(btskey)
 	if err != nil {
-		return &GetOutput{Status: 498}, nil
+		return &structs.GetOutput{Status: 498}, nil
 	}
 
 	sendtime, _ := strconv.ParseInt(usr.GetTime, 10, 64)
 
 	if math.Abs(float64(time.Now().Unix()-sendtime)) > 10 {
-		return &GetOutput{Status: 400}, nil
+		return &structs.GetOutput{Status: 400}, nil
 	}
 
 	hash := sha256.New()
@@ -57,19 +53,19 @@ func getMessages(ctx context.Context, input *GetInput) (*GetOutput, error) {
 	checksig := rsa.VerifyPKCS1v15(key, crypto.SHA256, hash.Sum(nil), btssig)
 
 	if checksig != nil {
-		return &GetOutput{Status: 401}, nil
+		return &structs.GetOutput{Status: 401}, nil
 	}
 
 	var msgs = db[usr.Uuid]
 	if msgs == nil {
-		msgs = []Message{}
+		msgs = []structs.Message{}
 	}
 
-	db[usr.Uuid] = []Message{}
+	db[usr.Uuid] = []structs.Message{}
 	newdb, err := json.Marshal(db)
-	FatalIfErr(err, "Can't marshal new db")
+	util.FatalIfErr(err, "Can't marshal new db")
 	err = os.WriteFile("db.json", newdb, fs.ModePerm)
-	FatalIfErr(err, "Can't write new db")
+	util.FatalIfErr(err, "Can't write new db")
 
-	return &GetOutput{msgs, 200}, nil
+	return &structs.GetOutput{Body: msgs, Status: 200}, nil
 }

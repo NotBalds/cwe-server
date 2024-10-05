@@ -1,4 +1,4 @@
-package main
+package structs
 
 type Message struct {
 	Sender  string `json:"sender" format:"uuid" doc:"Sender's UUID"`
