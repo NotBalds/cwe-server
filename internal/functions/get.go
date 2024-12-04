@@ -1,4 +1,4 @@
-package get
+package functions
 
 import (
 	"context"

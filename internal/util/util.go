@@ -1,13 +1,14 @@
 package util
 
 import (
-	"log"
 	"os"
+
+	"github.com/charmbracelet/log"
 )
 
 func FatalIfErr(err error, msg string) {
 	if err != nil {
-		log.Fatalln(msg)
+		log.Fatal(msg)
 	}
 }
 

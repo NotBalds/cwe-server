@@ -1,9 +1,10 @@
 package server
 
 import (
-	"log"
 	"net/http"
 	"sync"
+
+	"github.com/charmbracelet/log"
 
 	"github.com/gorilla/websocket"
 )
@@ -15,11 +16,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	defer ws.Close()
-
-	for {
-		messageType, message, err := ws.ReadMessage()
-		if 
-	}
 }
 
 func wsStart(port string, wg *sync.WaitGroup) {

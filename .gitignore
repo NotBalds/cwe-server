@@ -2,5 +2,5 @@ db.json
 .env
 server-update
 server.log
-result/
+result
 register.json

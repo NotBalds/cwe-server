@@ -10,8 +10,8 @@ import (
 )
 
 func main() {
-	os.Mkdir("v0.3.0", os.ModePerm)
-	os.Chdir("v0.3.0")
+	os.Mkdir("v1.0.0", os.ModePerm)
+	os.Chdir("v1.0.0")
 	godotenv.Load()
 	if !util.Exists("db.json") {
 		os.WriteFile("db.json", []byte("{}"), fs.ModePerm)
