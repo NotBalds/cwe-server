@@ -8,13 +8,13 @@ import (
 
 func startHttpServer(wg *sync.WaitGroup) {
 	var http_port = "1337"
-	log.Info("Starting http server on port " + http_port + "...")
+	log.Info("HTTP: Starting http server on port " + http_port + "...")
 	go httpStart(http_port, wg)
 }
 
 func startWsServer(wg *sync.WaitGroup) {
 	var ws_port = "2337"
-	log.Info("Starting ws server on port " + ws_port + "...")
+	log.Info("WS: Starting ws server on port " + ws_port + "...")
 	go wsStart(ws_port, wg)
 }
 
